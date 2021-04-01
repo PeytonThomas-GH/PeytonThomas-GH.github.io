@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.81.0" />
+
+
+<title>Who Is The Dirtiest Player In The History of MLS? - Peyton Thomas</title>
+<meta property="og:title" content="Who Is The Dirtiest Player In The History of MLS? - Peyton Thomas">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/peytonthomas-gh">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/thepeytonthomas">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">8 min read</span>
+    
+
+    <h1 class="article-title">Who Is The Dirtiest Player In The History of MLS?</h1>
+
+    
+    <span class="article-date">2021-03-30</span>
+    
+
+    <div class="article-content">
+      
+<script src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.3.3     v purrr   0.3.4
+## v tibble  3.0.5     v dplyr   1.0.3
+## v tidyr   1.1.2     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.0</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(ggrepel)</code></pre>
+<pre><code>## Warning: package &#39;ggrepel&#39; was built under R version 4.0.4</code></pre>
+<pre class="r"><code>library(ggalt)</code></pre>
+<pre><code>## Warning: package &#39;ggalt&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;ggalt&#39;:
+##   method                  from   
+##   grid.draw.absoluteGrob  ggplot2
+##   grobHeight.absoluteGrob ggplot2
+##   grobWidth.absoluteGrob  ggplot2
+##   grobX.absoluteGrob      ggplot2
+##   grobY.absoluteGrob      ggplot2</code></pre>
+<pre class="r"><code>library(gt)</code></pre>
+<pre><code>## Warning: package &#39;gt&#39; was built under R version 4.0.4</code></pre>
+<pre class="r"><code>MLS &lt;- read.csv(&quot;MLSDP.csv&quot;)</code></pre>
+<pre class="r"><code>MLS %&gt;% 
+  group_by(Player) %&gt;% 
+  summarise(
+    Reds = sum(CrdR),
+    Yellows = sum(CrdY),
+    Booking = sum(Reds, Yellows)
+  ) %&gt;%
+arrange(desc(Booking)) %&gt;% 
+  top_n(10)-&gt; MLSSB</code></pre>
+<pre><code>## Selecting by Booking</code></pre>
+<pre class="r"><code>MLSSBLong &lt;- MLSSB %&gt;% 
+  pivot_longer(
+    cols=(&quot;Yellows&quot; | &quot;Reds&quot;), 
+    names_to=&quot;Bookings&quot;, 
+    values_to=&quot;Cards&quot;) %&gt;%
+  arrange(desc(Bookings)) %&gt;%
+  mutate(BookingOrder = factor(Bookings))</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_bar(data = MLSSBLong, aes(x=reorder(Player, Cards), weight=Cards, fill=BookingOrder)) +
+  coord_flip() + 
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;gold&quot;)) + 
+  theme_minimal() +  
+  labs(x=&quot;&quot;, y=&quot;Total Bookings&quot;, title=&quot;With 21 Seasons, Kyle Beckerman Has A Clear Lead In Bookings&quot;, subtitle=&quot;Other players however, have amassed more red cards than Beckerman in a lesser time period.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  theme(
+    plot.title = element_text(size = 13, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )</code></pre>
+<p><img src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>FieldPlayers &lt;- c(&quot;DF&quot;, &quot;DFMF&quot;, &quot;FW&quot;, &quot;FWDF&quot;, &quot;FWMF&quot;, &quot;FWGK&quot;, &quot;MF&quot;, &quot;MFDF&quot;, &quot;MFFW&quot;)</code></pre>
+<pre class="r"><code>MLS %&gt;% 
+  group_by(Player) %&gt;% 
+  filter(
+    X90s &gt; 0,
+    Pos %in% FieldPlayers) %&gt;%
+  summarize(
+    Games = sum(`X90s`),
+    YellowCards = sum(CrdY)) -&gt; MLSAPP</code></pre>
+<pre class="r"><code>MLSAPP %&gt;% summarize(
+  mean(Games),
+  mean(YellowCards))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   `mean(Games)` `mean(YellowCards)`
+##           &lt;dbl&gt;               &lt;dbl&gt;
+## 1          43.1                7.25</code></pre>
+<pre class="r"><code>MLS %&gt;% group_by(Player) %&gt;% 
+  filter(
+    X90s &gt; 0,
+    Pos %in% FieldPlayers) %&gt;%
+  summarize(
+    Bookings = sum(CrdY + CrdR),
+    Years = n(),
+    Games = sum(X90s),
+    BPG = mean(Bookings/Games)) -&gt; MLSFP</code></pre>
+<pre class="r"><code>MLSFP %&gt;% filter(
+  Years &gt; 5,
+  Games &gt; 100,
+  BPG &gt; .28858
+) -&gt; MLSFPD</code></pre>
+<pre class="r"><code>MLSFP %&gt;% filter(Player == &quot;Kyle Beckerman&quot;) -&gt; KB</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_point(
+    data=MLSFP, 
+    aes(x=Games, y=Bookings, size=Years), 
+    color=&quot;grey&quot;, 
+    alpha=.5) + 
+  geom_point(
+    data=MLSFPD, 
+    aes(x=Games, y=Bookings, size=Years), 
+    color=&quot;#013A81&quot;,
+    alpha=.8) + 
+  geom_point(
+    data=KB, 
+    aes(x=Games, y=Bookings, size=Years), 
+    color=&quot;#B30838&quot;) +
+  geom_text_repel(
+    data=KB, 
+    aes(x=Games, y=Bookings, label=Player)
+  ) + geom_smooth(data=MLSFP, aes(x=Games, y=Bookings), method=&quot;lm&quot;) + theme_minimal() +  
+  labs(title=&quot;Kyle Beckerman Is Still The Bookings King&quot;, subtitle=&quot;However, several players have played multiple seasons within MLS and have a higher rate of bookings per match than Beckerman.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=8), 
+    panel.grid.minor = element_blank()
+    )</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>Notorious &lt;- MLS %&gt;% group_by(Player) %&gt;%
+  summarize(
+    Bookings = sum(CrdY + CrdR),
+    Years = n(),
+    Games = sum(X90s),
+    YPG = mean(CrdY/Games),
+    RPG = mean(CrdR/Games),
+    FPG = mean(Fls/Games)) %&gt;%
+  filter(Games &gt; 68,
+         Bookings &gt; 10,
+         Years &gt; 2) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>Notorious %&gt;% 
+  mutate(Bonus = case_when(
+  grepl(&quot;Diego C&quot;, Player) ~ 1, 
+  grepl(&quot;&quot;, Player) ~ 0)) -&gt; NameBonus</code></pre>
+<pre class="r"><code>Dirtyness &lt;- NameBonus %&gt;% group_by(Player) %&gt;%
+  mutate(DirtynessRating = (((YPG*.34 + RPG*1.7 + FPG*.017)*(Games^.7))*5+(Bonus))) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>Top10 &lt;- Dirtyness %&gt;%
+ arrange(desc(DirtynessRating)) %&gt;% 
+  top_n(10, wt=DirtynessRating) </code></pre>
+<pre class="r"><code>Top10 %&gt;% 
+  select(Player, Years, Games, DirtynessRating) %&gt;% 
+  rename(`90s` = Games) %&gt;% 
+  gt() %&gt;%
+  tab_header(
+    title = &quot;Behind An Impressive Brigade Of Red Cards, Ashley Cole Tops The Pack&quot;,
+    subtitle = &quot;Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely, 100% objective, non-bias statistic model.&quot;
+  ) %&gt;% tab_style(
+    style = cell_text(color = &quot;black&quot;, weight = &quot;bold&quot;, align = &quot;left&quot;),
+    locations = cells_title(&quot;title&quot;)
+  ) %&gt;% tab_style(
+    style = cell_text(color = &quot;black&quot;, align = &quot;left&quot;),
+    locations = cells_title(&quot;subtitle&quot;)
+  ) %&gt;%
+  tab_source_note(
+    source_note = &quot;Source: Sports Reference | By Peyton Thomas&quot;
+  ) %&gt;% tab_style(
+    style = cell_text(color = &quot;black&quot;, weight = &quot;bold&quot;),
+    locations = cells_body(
+      columns = vars(Player)
+    )
+  ) %&gt;% 
+  tab_style(
+    style = cell_text(color = &quot;black&quot;, weight = &quot;normal&quot;),
+    locations = cells_body(
+      columns = vars(Years),
+    )
+  ) %&gt;% 
+  tab_style(
+    style = cell_text(color = &quot;black&quot;, weight = &quot;normal&quot;),
+    locations = cells_body(
+      columns = vars(`90s`),
+    )
+  ) %&gt;% 
+  tab_style(
+    style = cell_text(color = &quot;black&quot;, weight = &quot;normal&quot;),
+    locations = cells_body(
+      columns = vars(DirtynessRating),
+      rows = DirtynessRating &lt; 6.9
+    )
+  ) %&gt;% 
+  tab_style(
+    style = cell_text(color = &quot;red&quot;, weight = &quot;bold&quot;),
+    locations = cells_body(
+      columns = vars(DirtynessRating),
+      rows = DirtynessRating &gt; 6.9
+    )
+  ) %&gt;% 
+  opt_row_striping() %&gt;% 
+  opt_table_lines(&quot;none&quot;) %&gt;% 
+  tab_style(
+    style = cell_borders(sides = c(&quot;top&quot;, &quot;bottom&quot;), 
+                         color = &quot;grey&quot;, weight = px(1)),
+    locations = cells_column_labels(everything())
+  )</code></pre>
+<pre><code>## Warning: The `.dots` argument of `group_by()` is deprecated as of dplyr 1.0.0.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#mvtopmughg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: none;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mvtopmughg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mvtopmughg .gt_bottom_border {
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mvtopmughg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mvtopmughg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mvtopmughg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mvtopmughg .gt_column_spanner {
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mvtopmughg .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mvtopmughg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mvtopmughg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mvtopmughg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mvtopmughg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mvtopmughg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#mvtopmughg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvtopmughg .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvtopmughg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: none;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mvtopmughg .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#mvtopmughg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mvtopmughg .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#mvtopmughg .gt_left {
+  text-align: left;
+}
+
+#mvtopmughg .gt_center {
+  text-align: center;
+}
+
+#mvtopmughg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mvtopmughg .gt_font_normal {
+  font-weight: normal;
+}
+
+#mvtopmughg .gt_font_bold {
+  font-weight: bold;
+}
+
+#mvtopmughg .gt_font_italic {
+  font-style: italic;
+}
+
+#mvtopmughg .gt_super {
+  font-size: 65%;
+}
+
+#mvtopmughg .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="mvtopmughg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="4" class="gt_heading gt_title gt_font_normal" style="color: black; text-align: left; font-weight: bold;">Behind An Impressive Brigade Of Red Cards, Ashley Cole Tops The Pack</th>
+    </tr>
+    <tr>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="color: black; text-align: left;">Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely, 100% objective, non-bias statistic model.</th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="border-top-width: 1px; border-top-style: solid; border-top-color: grey; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: grey;">Player</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="border-top-width: 1px; border-top-style: solid; border-top-color: grey; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: grey;">Years</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-top-width: 1px; border-top-style: solid; border-top-color: grey; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: grey;">90s</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-top-width: 1px; border-top-style: solid; border-top-color: grey; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: grey;">DirtynessRating</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left" style="color: black; font-weight: bold;">Ashley Cole</td>
+      <td class="gt_row gt_center" style="color: black; font-weight: normal;">3</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">82.4</td>
+      <td class="gt_row gt_right" style="color: red; font-weight: bold;">6.908997</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="color: black; font-weight: bold;">Simo Valakari</td>
+      <td class="gt_row gt_center gt_striped" style="color: black; font-weight: normal;">3</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">82.0</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">6.586732</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="color: black; font-weight: bold;">Leandro GonzÃ¡lez Pirez</td>
+      <td class="gt_row gt_center" style="color: black; font-weight: normal;">4</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">108.0</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">6.436458</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="color: black; font-weight: bold;">Cristian Higuita</td>
+      <td class="gt_row gt_center gt_striped" style="color: black; font-weight: normal;">5</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">80.8</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">5.831424</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="color: black; font-weight: bold;">Diego CharÃ¡</td>
+      <td class="gt_row gt_center" style="color: black; font-weight: normal;">10</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">275.0</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">5.634111</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="color: black; font-weight: bold;">Leonel Ãlvarez</td>
+      <td class="gt_row gt_center gt_striped" style="color: black; font-weight: normal;">6</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">123.0</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">5.594897</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="color: black; font-weight: bold;">Jack Price</td>
+      <td class="gt_row gt_center" style="color: black; font-weight: normal;">3</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">69.8</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">5.557239</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="color: black; font-weight: bold;">AnÃ­bal Godoy</td>
+      <td class="gt_row gt_center gt_striped" style="color: black; font-weight: normal;">6</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">112.6</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">5.487606</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="color: black; font-weight: bold;">MatÃ­as Laba</td>
+      <td class="gt_row gt_center" style="color: black; font-weight: normal;">5</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">122.4</td>
+      <td class="gt_row gt_right" style="color: black; font-weight: normal;">5.401492</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="color: black; font-weight: bold;">Kendall Waston</td>
+      <td class="gt_row gt_center gt_striped" style="color: black; font-weight: normal;">7</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">152.7</td>
+      <td class="gt_row gt_right gt_striped" style="color: black; font-weight: normal;">5.276071</td>
+    </tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="4">Source: Sports Reference | By Peyton Thomas</td>
+    </tr>
+  </tfoot>
+  
+</table></div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

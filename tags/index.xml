@@ -5,6 +5,25 @@
     <link>/tags/</link>
     <description>Recent content in Tags on Peyton Thomas</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Tue, 30 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MLS</title>
+      <link>/tags/mls/</link>
+      <pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/mls/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Soccer</title>
+      <link>/tags/soccer/</link>
+      <pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/soccer/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
