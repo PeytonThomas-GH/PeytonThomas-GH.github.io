@@ -76,11 +76,11 @@
 <script src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>Following the 1994 FIFA World Cup, the U.S Soccer Federation decided it was the right time to create a Divison 1 soccer league within the country. Starting play in 1996 with 8 teams, MLS has now completed 26 seasons through 2020 and expanded to a whopping 27 clubs with plans to extend out to 30 by the 2023 season.</p>
-<p>Through that history, the league has seen a number of aggressive, tough, and physical players pass through the ranks, coming from different countries across the globe.</p>
+<p>Following the 1994 FIFA World Cup, the U.S Soccer Federation decided it was the right time to create a Division 1 soccer league within the country. Starting play in 1996 with 8 teams, Major League Soccer has now completed 26 seasons and expanded to a whopping 27 clubs, with plans out to 30 by the 2023 season.</p>
+<p>Throughout that history, the league has seen a number of aggressive, tough, and physical players pass through the ranks, coming from different countries across the globe.</p>
 <p>^</p>
 <p>This is Diego Chara of the Portland Timbers. He was the original inspiration for this quest. Since joining the Timbers in 2011, he has made a career out of playing hardball, many times over the line in the eyes of the official, and of course, rival fans.</p>
-<p>But how does Chara stack up amongst to dirtiest players in league history?</p>
+<p>But how does Chara stack up to the dirtiest players in league history?</p>
 <p>Lets get stuck in.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --</code></pre>
@@ -105,8 +105,8 @@
 <pre class="r"><code>library(gt)</code></pre>
 <pre><code>## Warning: package &#39;gt&#39; was built under R version 4.0.4</code></pre>
 <pre class="r"><code>MLS &lt;- read.csv(&quot;MLSDP.csv&quot;)</code></pre>
-<p>The lone data set I’m using has been collected through Sports Reference under the “Misc. Stats: Players” data for the MLS. This set is a collection of all players throughout the 26 year history of the league. The key discipline stats I’m going to rely on to start comparing each of these players on are yellow cards, red cards, and fouls. I also included the number of ‘90s’ each player played in the league, which is more accurate than simple appearances since some players don’t play the full match in each appearance.</p>
-<p>First, lets take a look at the top 10 players in all time combined bookings in league history.</p>
+<p>The lone data set I’m using has been collected through Sports Reference under the “Misc. Stats: Players” data for the MLS. This data set is a collection of every player throughout the 26 year history of the league. The key discipline statistics I’m going to rely on to start comparing each of these players are yellow cards, red cards, and fouls. I also included the number of ‘90s’ each player played in the league, which is more accurate than simple appearances since some players don’t play the full match in each appearance.</p>
+<p>First, lets take a look at the Top 10 players in all time bookings, yellow cards and red cards.</p>
 <pre class="r"><code>MLS %&gt;% 
   group_by(Player) %&gt;% 
   summarise(
@@ -130,7 +130,7 @@ arrange(desc(Booking)) %&gt;%
   coord_flip() + 
   scale_fill_manual(values = c(&quot;red&quot;, &quot;gold&quot;)) + 
   theme_minimal() +  
-  labs(x=&quot;&quot;, y=&quot;Total Bookings&quot;, title=&quot;With 21 Seasons, Kyle Beckerman Has A Clear Lead In Bookings&quot;, subtitle=&quot;Other players however, have amassed more red cards than Beckerman in a lesser time period.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(x=&quot;&quot;, y=&quot;Total Bookings&quot;, title=&quot;With 21 Seasons, Kyle Beckerman Has A Clear Lead In Bookings&quot;, subtitle=&quot;But several others have amassed more red cards than Beckerman in less time.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 13, face = &quot;bold&quot;),
     axis.title = element_text(size = 10), 
@@ -138,11 +138,11 @@ arrange(desc(Booking)) %&gt;%
     panel.grid.minor = element_blank()
     )</code></pre>
 <p><img src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
-Beckerman, of course Beckerman. Kyle Beckerman, the Real Salt Lake midfielder with legs of steel. Our friend Diego Chara also managed to finish runner up.
-So is that it then? Is Beckerman clearly the dirtiest player in MLS? Well not exactly, this model clearly favors players who have managed to play more minutes within the league. Since there is no basis that can balance these bookings against how long each player has played. Kyle Beckerman with an outstanding 22 seasons and 457.4 ‘90s’ has a significant advantage over everyone else. Chara also hasnt done too bad for himself with 10 seasons and 275 ‘90s’.</p>
-<p>If these players have played so many games compared to everyone else, what is the average amount of appearances and specifically yellow cards for your average joe?</p>
+Beckerman, of course Beckerman. Kyle Beckerman, the Real Salt Lake midfielder with legs of steel. Our friend Diego Chara also managed to finish runner up. So is that it then? Is Beckerman clearly the dirtiest player in MLS?</p>
+<p>Well not exactly, this model favors players who have managed to play more minutes within the league, since there is no basis that can balance these bookings against how long each player has played. Kyle Beckerman with an outstanding 22 seasons and 457.4 ‘90s’ has a significant advantage over everyone else. Chara also hasn’t done too bad for himself with 10 seasons and 275 ‘90s’.</p>
+<p>If these players have played so many games compared to everyone else, what is the average amount of appearances and specifically yellow cards for your Average Joe?</p>
 <p>First, lets take out Goalkeepers, since no one really cares about the “time wasting” yellows that they seldom pick up.</p>
-<p>We can also remove all of the players in our dataset who have never taken the field to play a single minute.</p>
+<p>We can also remove the players in our dataset who have never taken the field to play a single minute.</p>
 <pre class="r"><code>FieldPlayers &lt;- c(&quot;DF&quot;, &quot;DFMF&quot;, &quot;FW&quot;, &quot;FWDF&quot;, &quot;FWMF&quot;, &quot;FWGK&quot;, &quot;MF&quot;, &quot;MFDF&quot;, &quot;MFFW&quot;)</code></pre>
 <pre class="r"><code>MLS %&gt;% 
   group_by(Player) %&gt;% 
@@ -154,14 +154,14 @@ So is that it then? Is Beckerman clearly the dirtiest player in MLS? Well not ex
     YellowCards = sum(CrdY)) -&gt; MLSAPP</code></pre>
 <p>Perfect, now lets find the medians for what we have left.</p>
 <pre class="r"><code>MLSAPP %&gt;% summarize(
-  median(Games),
-  median(YellowCards))</code></pre>
+  `Median Games` = median(Games),
+  `Median Yellows` = median(YellowCards))</code></pre>
 <pre><code>## # A tibble: 1 x 2
-##   `median(Games)` `median(YellowCards)`
-##             &lt;dbl&gt;                 &lt;int&gt;
-## 1            17.9                     3</code></pre>
-<p>A little below 18 ‘90s’ paired with just 3 yellow cards for our average joe. A far sight from the Beckerman’s of the league.</p>
-<p>Okay, so lets throw that into context, by grouping together all our average joes, which includes all field players who have played at least one minute.</p>
+##   `Median Games` `Median Yellows`
+##            &lt;dbl&gt;            &lt;int&gt;
+## 1           17.9                3</code></pre>
+<p>A little below 18 ‘90s’ paired with just 3 yellow cards for our Average Joe. A far sight from Beckerman’s tally.</p>
+<p>Lets throw those median values into context, by grouping together all our Average Joes, which includes all field players who have played at least one minute.</p>
 <pre class="r"><code>MLS %&gt;% group_by(Player) %&gt;% 
   filter(
     X90s &gt; 0,
@@ -171,7 +171,7 @@ So is that it then? Is Beckerman clearly the dirtiest player in MLS? Well not ex
     Years = n(),
     Games = sum(X90s),
     BPG = mean(Bookings/Games)) -&gt; MLSAJ</code></pre>
-<p>Now, throughout his career Beckerman has amassed an impressive ~0.289 bookings per game. Which has helped him pull away in our previous chart. However lets see how many experienced players have an even higher Bookings/Game rate than our bookings leader.</p>
+<p>Throughout his career, Beckerman has amassed an impressive ~0.289 bookings per game. Which has helped him pull away on the all time leaderboard. However lets tally how many experienced players have an even higher Bookings/Game rate than our bookings leader.</p>
 <p>We’ll also create a dataframe for Beckerman himself.</p>
 <pre class="r"><code>MLSAJ %&gt;% filter(
   Years &gt; 5,
@@ -198,19 +198,19 @@ So is that it then? Is Beckerman clearly the dirtiest player in MLS? Well not ex
     data=KB, 
     aes(x=Games, y=Bookings, label=Player)
   ) + geom_smooth(data=MLSAJ, aes(x=Games, y=Bookings), method=&quot;lm&quot;) + theme_minimal() +  
-  labs(title=&quot;Kyle Beckerman Is Still The Bookings King&quot;, subtitle=&quot;However, several players have played multiple seasons within MLS and have a higher rate of bookings per match than Beckerman.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(title=&quot;Kyle Beckerman Is Still The Bookings King&quot;, subtitle=&quot;However, 25 players with heavy experience surpass Beckerman in bookings per match.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
     axis.title = element_text(size = 8), 
-    plot.subtitle = element_text(size=8), 
+    plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     )</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/2021/03/30/who-is-the-dirtiest-player-in-the-history-of-mls/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
-The blue line separates the median number of Bookings/Game created from our average joe. All players below the line are “clean”, while players above the line are “dirty” compared to the average.</p>
-<p>Clearly, Beckerman is in a league of his own in terms of games and yellows combined. But using his clubs colors, there are more than 2 dozen players in blue, that not only have a great wealth of experience, but also a greater Bookings/Game rate than Beckerman. SO it may not be so clear after all.</p>
-<p>Okay, so lets leave everyone at the mercy of the same jury, by creating a “Dirtyness Rating” for every eligble player.</p>
-<p>In order to be the dirtiest player in MLS history, you must be Notorious. In this case, that means playing more than 68 ‘90s’. Why 68? Well there are 34 games in an MLS season so 68 ‘90s’ would be 2 full seasons on the pitch. On top of that, at least 10 different bookings, and appearances in at least 3 different seasons throughout each players MLS career.</p>
+The blue line separates the median number of Bookings/Game created from our Average Joe. All players below the line are relatively “clean”, while players above the line are “dirty” compared to the average.</p>
+<p>Clearly, Beckerman is in a league of his own in terms of games and yellows combined. But using his clubs colors, there are more than 2 dozen players in blue, that not only have a great wealth of experience, but also a greater Bookings/Game rate than Beckerman. It may not be so clear after all.</p>
+<p>Lets leave everyone at the mercy of the same jury, by creating a “Dirtyness Rating” for every eligible player.</p>
+<p>In order to be the dirtiest player in MLS history, you must be Notorious. In this case, that means playing more than 68 ‘90s’. Why 68? Well there are 34 games in an MLS season so 68 ‘90s’ would be 2 full seasons on the pitch. At least 10 different bookings, and finally, seperate appearances in at least 3 different seasons throughout each players MLS career.</p>
 <pre class="r"><code>Notorious &lt;- MLS %&gt;% group_by(Player) %&gt;%
   summarize(
     Bookings = sum(CrdY + CrdR),
@@ -223,17 +223,17 @@ The blue line separates the median number of Bookings/Game created from our aver
          Bookings &gt; 10,
          Years &gt; 2) %&gt;%
   ungroup()</code></pre>
-<p>Along with filtering our Notorious players, I also created average discipline ratings per game for each player, to help limit the advantage for a higher number of appearances. That leaves us with 539 candidates to become the “Dirtiest Player in the History of MLS.”</p>
-<p>Now we are almost ready to throw our players into our formula, however we are going to slide into one more reckless factor. A name bonus.</p>
-<p>There is an interesting phenomenon in MLS that players who have played in the league with a name starting with “Diego C” carry a reputation of being extremely dirty compared to other players, whose names do not start with “Diego C.”</p>
+<p>Along with filtering our Notorious players, I also created average discipline ratings per game for each player, to help limit the advantage for a higher number of appearances. Leaving us with just 539 candidates to become the “Dirtiest Player in the History of MLS.”</p>
+<p>We are almost ready to throw our players into our formula, however lets slide into one more reckless factor. A name bonus.</p>
+<p>There is an interesting phenomenon in MLS that players who have played in the league with a name starting with “Diego C” carry a reputation of being extremely dirty, compared to other players whose names do not start with “Diego C”.</p>
 <p>So lets award all players who have a name that starts with “Diego C” a 1 point bonus in our formula.</p>
 <pre class="r"><code>Notorious %&gt;% 
   mutate(Bonus = case_when(
   grepl(&quot;Diego C&quot;, Player) ~ 1, 
   grepl(&quot;&quot;, Player) ~ 0)) -&gt; NameBonus</code></pre>
-<p>Here we go, now lets throw every eligible player through our “Dirtyness Formula” which reads as follows.</p>
+<p>Here we go, its time to throw every eligible player through our “Dirtyness Formula” which reads as follows.</p>
 <p>Dirtyness Rating = (((YPG<em>.34 + RPG</em>1.7 + FPG<em>.017)</em>(Games^.7))*5+(Bonus))</p>
-<p>So, Yellows/Game, Reds/Game, and Fouls/Game have all been weighted based on how often they occur in a match, and how ‘dirty’ each type of action is perceived. For example, a red card is going to improve your dirtyness rating more than a common foul.</p>
+<p>Yellows/Game, Reds/Game, and Fouls/Game have all been weighted based on how often they occur in a match, and how ‘dirty’ each type of action is perceived. For example, a red card is going to improve your dirtyness rating more than a common foul.</p>
 <p>These three values are then added together and multiplied by an exponential function Games^.7. This function provides a slight advantage to players who have played more games in the MLS. Essentially, experienced players are slightly dirtier since they have done it for longer.</p>
 <p>Then, our value is multiplied by 5. The last step is to simply add in our bonus. Remember, all players with a name starting with “Diego C” will receive a 1 point bonus in their final Dirtyness Rating.</p>
 <p>Okay, lets do this thing.</p>
@@ -249,7 +249,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   gt() %&gt;%
   tab_header(
     title = &quot;Behind An Impressive Brigade Of Red Cards, Cole Tops The Pack&quot;,
-    subtitle = &quot;Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely, 100% objective, non-bias statistic model.&quot;
+    subtitle = &quot;Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely fair, 100% objective, non-bias model.&quot;
   ) %&gt;% tab_style(
     style = cell_text(color = &quot;black&quot;, weight = &quot;bold&quot;, align = &quot;left&quot;),
     locations = cells_title(&quot;title&quot;)
@@ -305,7 +305,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#kknchxppcf .gt_table {
+#nsklyxmaov .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -330,7 +330,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-left-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_heading {
+#nsklyxmaov .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -342,7 +342,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-right-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_title {
+#nsklyxmaov .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -352,7 +352,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-bottom-width: 0;
 }
 
-#kknchxppcf .gt_subtitle {
+#nsklyxmaov .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -362,13 +362,13 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-top-width: 0;
 }
 
-#kknchxppcf .gt_bottom_border {
+#nsklyxmaov .gt_bottom_border {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_col_headings {
+#nsklyxmaov .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -383,7 +383,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-right-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_col_heading {
+#nsklyxmaov .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -403,7 +403,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   overflow-x: hidden;
 }
 
-#kknchxppcf .gt_column_spanner_outer {
+#nsklyxmaov .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -415,15 +415,15 @@ The blue line separates the median number of Bookings/Game created from our aver
   padding-right: 4px;
 }
 
-#kknchxppcf .gt_column_spanner_outer:first-child {
+#nsklyxmaov .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kknchxppcf .gt_column_spanner_outer:last-child {
+#nsklyxmaov .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kknchxppcf .gt_column_spanner {
+#nsklyxmaov .gt_column_spanner {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -435,7 +435,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   width: 100%;
 }
 
-#kknchxppcf .gt_group_heading {
+#nsklyxmaov .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -457,7 +457,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   vertical-align: middle;
 }
 
-#kknchxppcf .gt_empty_group_heading {
+#nsklyxmaov .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -472,15 +472,15 @@ The blue line separates the median number of Bookings/Game created from our aver
   vertical-align: middle;
 }
 
-#kknchxppcf .gt_from_md > :first-child {
+#nsklyxmaov .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kknchxppcf .gt_from_md > :last-child {
+#nsklyxmaov .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kknchxppcf .gt_row {
+#nsklyxmaov .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -499,7 +499,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   overflow-x: hidden;
 }
 
-#kknchxppcf .gt_stub {
+#nsklyxmaov .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -511,7 +511,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   padding-left: 12px;
 }
 
-#kknchxppcf .gt_summary_row {
+#nsklyxmaov .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -521,7 +521,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   padding-right: 5px;
 }
 
-#kknchxppcf .gt_first_summary_row {
+#nsklyxmaov .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -531,7 +531,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-top-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_grand_summary_row {
+#nsklyxmaov .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -541,7 +541,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   padding-right: 5px;
 }
 
-#kknchxppcf .gt_first_grand_summary_row {
+#nsklyxmaov .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -551,11 +551,11 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-top-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_striped {
+#nsklyxmaov .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kknchxppcf .gt_table_body {
+#nsklyxmaov .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -564,7 +564,7 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-bottom-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_footnotes {
+#nsklyxmaov .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -578,13 +578,13 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-right-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_footnote {
+#nsklyxmaov .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#kknchxppcf .gt_sourcenotes {
+#nsklyxmaov .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -598,52 +598,52 @@ The blue line separates the median number of Bookings/Game created from our aver
   border-right-color: #D3D3D3;
 }
 
-#kknchxppcf .gt_sourcenote {
+#nsklyxmaov .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#kknchxppcf .gt_left {
+#nsklyxmaov .gt_left {
   text-align: left;
 }
 
-#kknchxppcf .gt_center {
+#nsklyxmaov .gt_center {
   text-align: center;
 }
 
-#kknchxppcf .gt_right {
+#nsklyxmaov .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kknchxppcf .gt_font_normal {
+#nsklyxmaov .gt_font_normal {
   font-weight: normal;
 }
 
-#kknchxppcf .gt_font_bold {
+#nsklyxmaov .gt_font_bold {
   font-weight: bold;
 }
 
-#kknchxppcf .gt_font_italic {
+#nsklyxmaov .gt_font_italic {
   font-style: italic;
 }
 
-#kknchxppcf .gt_super {
+#nsklyxmaov .gt_super {
   font-size: 65%;
 }
 
-#kknchxppcf .gt_footnote_marks {
+#nsklyxmaov .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="kknchxppcf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="nsklyxmaov" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="4" class="gt_heading gt_title gt_font_normal" style="color: black; text-align: left; font-weight: bold;">Behind An Impressive Brigade Of Red Cards, Cole Tops The Pack</th>
     </tr>
     <tr>
-      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="color: black; text-align: left;">Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely, 100% objective, non-bias statistic model.</th>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="color: black; text-align: left;">Diego Chara of the Portland Timbers also cracks the Top 5 in dirtiest players in history of the league, using an absolutely fair, 100% objective, non-bias model.</th>
     </tr>
   </thead>
   <thead class="gt_col_headings">
@@ -723,9 +723,9 @@ The blue line separates the median number of Bookings/Game created from our aver
   </tfoot>
   
 </table></div>
-<p>Ashley Cole played 3 seasons in MLS for a combined 82.4 ‘90s’. He didn’t clear the “Notorious” requirement by much, but he certainly left his mark on MLS with a crusade of reckless challenges. With an impressive 0.0243 Red Cards/Game rate, almost twice as high as any other player, Cole has the highest Dirtyness Rating in the league at ~6.91, a margin of over 0.3 or 5% from the runner-up. Cole was able to collect 6 red cards during his comparatively short spell in MLS, and reds were 33% of his total bookings, much higher than the average. In his 3 seasons, Cole was suspended for 9 separate games due to his proclivity for discipline.</p>
+<p>Ashley Cole played 3 seasons in MLS for a combined 82.4 ‘90s’. He didn’t clear the “Notorious” requirement by much, but he certainly left his mark on MLS with a crusade of dangerous challenges. With an impressive 0.0243 Red Cards/Game rate, almost twice as high as any other player, Cole has the highest Dirtyness Rating in the league at ~6.91, a margin of over 0.3 or 5% from Valakari, the runner-up. Cole was able to collect 6 red cards during his comparatively short spell in MLS, those 6 reds were also a whopping 33% of his total bookings, much higher than the average. In just 3 seasons, Cole was suspended for 9 separate games due to his proclivity for discipline.</p>
 <p>Our friend Diego Chara also made his mark, coming in at the number 5 spot. With 275 ‘90s’ Chara has significantly more experience in the league than any other player who was able to crack the Top 10.</p>
-<p>In the end, the title of “Dirtiest Player in the History of the MLS” goes to a player who made a name for his tough play on a different continent. AShley Cole, congratulations, you earned it.</p>
+<p>In the end, the title of “Dirtiest Player in the History of the MLS” goes to a player who made a name for his tough play on a different continent, before entering into MLS. Ashley Cole, congratulations, you earned it.</p>
 
     </div>
   </article>
