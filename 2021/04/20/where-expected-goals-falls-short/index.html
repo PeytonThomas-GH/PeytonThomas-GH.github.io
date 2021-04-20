@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.81.0" />
+
+
+<title>Where Expected Goals Falls Short - Peyton Thomas</title>
+<meta property="og:title" content="Where Expected Goals Falls Short - Peyton Thomas">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/peytonthomas-gh">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/thepeytonthomas">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">7 min read</span>
+    
+
+    <h1 class="article-title">Where Expected Goals Falls Short</h1>
+
+    
+    <span class="article-date">2021-04-20</span>
+    
+
+    <div class="article-content">
+      
+<script src="/2021/04/20/where-expected-goals-falls-short/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Recently across the soccer world. Fans have been accustomed to an “Expected Goals(xG)” metric attached to each team which represents how many goals that team should be expected to score over the course of the game. The metric has been created by assigning each shot a team takes a value on a scale from 0 to 1 based on how likely that shot would be a goal. The factors included in each shot includes the distance, position of defenders, type and speed of pass, type of shot, shot angles and other aspects.</p>
+<p>Now that xG has been introduced into the MLS throughout the 2020 regular season, we can take a look at how each team performs compared to how many goals they were expected to both score and concede over the course of the season. We can then take these comparisons and make assumptions about where the accuracy of xG falls short based on how different teams play.</p>
+<p>Lets get stuck in.</p>
+<pre class="r"><code>library(tidyverse)
+library(ggalt)
+library(ggrepel)
+
+TeamFor &lt;- read_csv(&quot;TeamAll.csv&quot;)
+TeamAg &lt;- read_csv(&quot;vs-all.csv&quot;)</code></pre>
+<p>The two data sets I’ll be working with include Season data for and against every team within MLS. The data has been collected from sports-reference.com. Not only do these data sets include expected goals, but also expected assists, non-penalty goals, and more.</p>
+<p>Lets start simple, taking a look first at the expected goals rating over the course of the whole season for each team, which is displayed in red. Now how closely does each team perform to their expected rating? The actual amount of goals scored by each team is displayed in green.</p>
+<pre class="r"><code>ggplot() + 
+  geom_dumbbell(
+    data=TeamFor, 
+    aes(y=reorder(Squad, `xG`), x=Gls, xend=xG),
+    size = 1,
+    color = &quot;grey&quot;,
+    colour_x = &quot;green&quot;,
+    colour_xend = &quot;red&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="/2021/04/20/where-expected-goals-falls-short/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+Leading the way in expected goals is Seattle with 41.8, and they scored exactly the amount of goals that you would expect by using xG, with 42. However, as we make our way down the list, we discover a distinct set of outliers. Clubs such as Philadelphia or Portland, blew their expected goals ratings out of the water, while other clubs such as New England and FC Cincinnati fell well short of their expected mark.</p>
+<p>Starting with the clubs who outperformed their xG metric, what do they have in common? Well, first of both were higher seeds in the playoffs, shocker. Teams who score have more success. But what else? Something that could point closer to the roots of the metric. Coaching, the head coaches for both of these teams are very experienced and highly regarded throughout MLS. Philadelphia’s Jim Curtain won manager of the year.</p>
+<p>Maybe pressure? Both teams press high up on the pitch, forcing mistakes out of their opponents. When their opponents made mistakes both Philly and Portland were clinical. This creates a dynamic where more goals are scored on less chances.</p>
+<p>On the flip side of the coin, New England and FC Cincinnati had trouble putting the ball in the back of the net. New England made a run in the playoffs due to some healthy key attacking players they didn’t have over most of the regular season. While Cincy, well they just don’t have much attacking talent at all. Better attackers finish more chances, worse attackers miss the easy ones.</p>
+<p>However there is also a defensive factor here. Similarly to expected goals going forward, keeping those easy goals out is also an art.</p>
+<pre class="r"><code>ggplot() + 
+  geom_dumbbell(
+    data=TeamAg, 
+    aes(y=reorder(Squad, -`xG`), x=Gls, xend=xG),
+    size = 1,
+    color = &quot;grey&quot;,
+    colour_x = &quot;green&quot;,
+    colour_xend = &quot;red&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="/2021/04/20/where-expected-goals-falls-short/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+Seattle leads the way again, expected to only concede 20.9 goals, and actually conceding 22. But again, we see some similar outliers on the defensive side.</p>
+<p>Columbus, Minnesota, and again Philadelphia did a great job avoiding many of the chances they faced, while San Jose and the LA Galaxy struggled and keeping it clean at the back.</p>
+<p>Between the clubs who outperformed the mark, both Columbus and Philadelphia had their goalkeeper named on the shortlist for the GK of the Year award, with Philly’s Andre Blake winning. Minnesota also is renown across the league for defensive organization under defensive mastermind Adrian Heath. All 3 clubs also made the playoffs.</p>
+<p>On to the clubs who aren’t so sharp. LA Galaxy are a club who cares about attack. Over the course of the year, organization seemed a problem which was never addressed, and teams were able to play through and convert their chances.</p>
+<p>San Jose underperforming defensively is like the sky being blue, certain. Under head coach Matías Almeyda, the Quakes have been repeatedly criticized for their man on man, aggressive style of defending. The style of extremely unique to only them and is absolutely perfect for avoiding expected goals. Players on San Jose are told to jump every pass or take every risk on each of the opponents chances. This manifests into either a good defense play and no shot(0.0 xG), or a mishap and a very clear shot at the net, limiting the expected goals for your opponent, while maximizing actual goals. Congrats San Jose, you win this one.</p>
+<p>However, we’re looking for an overarching theme. Regardless of attack or defense, what is the one wild card that makes teams overperform or underperform?</p>
+<p>Instead of staying with expected goals, lets get even broader. Non-penalty expected goals, plus expected assists, to identify a broader ability to score, then subtracted by the opposing non-penalty expected goals, plus their expected assists. Our formula looks like this.</p>
+<p>Expected Goals + Assists Differential(EGAD) = (npxG+xA) - (vsnpxG+vsxA)</p>
+<p>Then we will also calculate the Actual Goals + Assists Differential(AGAD)</p>
+<pre class="r"><code>xGF &lt;- TeamFor %&gt;% select(Squad, `G-PK`, Ast, `npxG+xA`)
+xGA &lt;- TeamAg %&gt;% select(Squad, `G-PK`, Ast, `npxG+xA`) %&gt;% 
+  rename(`vs npkG` = `G-PK`,
+         `vs Ast` = Ast,
+         `vs npxG+xA` = `npxG+xA`)</code></pre>
+<pre class="r"><code>xG &lt;- bind_cols(xGF, xGA)</code></pre>
+<pre><code>## New names:
+## * Squad -&gt; Squad...1
+## * Squad -&gt; Squad...5</code></pre>
+<pre class="r"><code>xGFull &lt;- xG %&gt;% 
+  select(Squad...1, `G-PK`, Ast, `npxG+xA`, `vs npkG`, `vs Ast`, `vs npxG+xA`) %&gt;% 
+  rename(Squad = `Squad...1`,
+         `vs G-PK` = `vs npkG`)</code></pre>
+<pre class="r"><code>xGPlot &lt;- xGFull %&gt;% 
+  mutate(`ExpectedG+ADif` = (`npxG+xA` - `vs npxG+xA`),
+        `ActualG+ADif` = (`G-PK` + Ast) - (`vs G-PK` + `vs Ast`))</code></pre>
+<p>There were 23 games in the shortened 2020 MLS season. So in order to be an overachiever, your AGAD - your EGAD must be at least 23, and similarly, to be an underachiever, your AGAD - your EGAD must be lower than -23.</p>
+<pre class="r"><code>Overachiever &lt;- xGPlot %&gt;% filter(`ActualG+ADif` - `ExpectedG+ADif` &gt; 23)
+Underachiever &lt;- xGPlot %&gt;% filter(`ActualG+ADif` - `ExpectedG+ADif` &lt; -23)</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_point(
+    data=xGPlot, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`), cex = 3) +
+  geom_point(
+    data=Overachiever, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`), color = &quot;green&quot;, cex = 4)  +
+  geom_point(
+    data=Underachiever, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`), color = &quot;red&quot;, cex = 4) +
+  geom_smooth(
+     data=xGPlot, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`), method=&quot;lm&quot;) +
+  geom_text_repel(
+    data=Overachiever, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`, label=Squad)) + 
+  geom_text_repel(
+    data=Underachiever, 
+    aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`, label=Squad))+ theme_minimal() +  
+  labs(x= &quot;Expected Goals and Assists Differential&quot;, y= &quot;ACtual Goals and Assists Differential&quot;, title=&quot;The MLS Cup Winning Columbus Crew Overperformed&quot;, subtitle=&quot;Underperformer FC Cincinnati finished dead last in the entire league and LA Galaxy wasn&#39;t far behind.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/2021/04/20/where-expected-goals-falls-short/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+Similar suspects, we’ve seen these guys before, but now with a much more complete picture. 3 playoff teams headline our overachievers, while 2 basement dwellers round out the underachievers.</p>
+<p>Both underachievers have had a manager change within the past year. While all three overachieving clubs have stable, experienced, and decorated managers leading their sides.</p>
+<p>Expected goals is a complicated metric, and useful to understand who controlled the majority of any given match. However, once the match is played on the pitch, countless variables come into play to influence the outcome of the match.</p>
+<p>However it is clear to see that good coaching is important. Many in the soccer community argue that managers are fired too often or too quickly. But it seems difficult to believe that many struggling managers will ever manage to win major silverware in their current situations.</p>
+<p>Winning managers get the most out of their squads, the most out of their chances, and the most out of their expected goals rating.</p>
+<p>Winning managers win, simple as that.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
