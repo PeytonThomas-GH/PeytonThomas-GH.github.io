@@ -95,7 +95,7 @@ TeamAg &lt;- read_csv(&quot;vs-all.csv&quot;)</code></pre>
     color = &quot;grey&quot;,
     colour_x = &quot;green&quot;,
     colour_xend = &quot;red&quot;) + theme_minimal() +
-  labs(x= &quot;Goals&quot;, y= &quot;&quot;, title=&quot;Portland Ranked 13th in xG, But 1st In Goals&quot;, subtitle=&quot;FC Cincinatti had one of the worst offensive records in the history of MLS netting only 12 goals in 23 matches.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(x= &quot;Goals&quot;, y= &quot;&quot;, title=&quot;Portland Ranked 13th in xG, But 1st In Goals&quot;, subtitle=&quot;FC Cincinnati had one of the worst offensive records in the history of MLS netting only 12 goals in 23 matches.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
     axis.title = element_text(size = 10), 
@@ -168,7 +168,7 @@ Underachiever &lt;- xGPlot %&gt;% filter(`ActualG+ADif` - `ExpectedG+ADif` &lt; 
   geom_text_repel(
     data=Underachiever, 
     aes(x=`ExpectedG+ADif`, y=`ActualG+ADif`, label=Squad))+ theme_minimal() +  
-  labs(x= &quot;Expected Goals and Assists Differential&quot;, y= &quot;ACtual Goals and Assists Differential&quot;, title=&quot;The MLS Cup Winning Columbus Crew Overperformed&quot;, subtitle=&quot;Underperformer FC Cincinnati finished dead last in the entire league and LA Galaxy wasn&#39;t far behind.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(x= &quot;Expected Goals and Assists Differential&quot;, y= &quot;Actual Goals and Assists Differential&quot;, title=&quot;The MLS Cup Winning Columbus Crew Overperformed&quot;, subtitle=&quot;Underperformer FC Cincinnati finished dead last in the entire league and LA Galaxy wasn&#39;t far behind.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
     axis.title = element_text(size = 8), 
