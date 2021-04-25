@@ -95,7 +95,8 @@ TeamAg &lt;- read_csv(&quot;vs-all.csv&quot;)</code></pre>
     color = &quot;grey&quot;,
     colour_x = &quot;green&quot;,
     colour_xend = &quot;red&quot;) + theme_minimal() +
-  labs(x= &quot;Goals&quot;, y= &quot;&quot;, title=&quot;Portland Ranked 13th in xG, But 1st In Goals&quot;, subtitle=&quot;FC Cincinnati had one of the worst offensive records in the history of MLS netting only 12 goals in 23 matches.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(x= &quot;Goals&quot;, y= &quot;&quot;, title=&quot;Portland Ranked 13th in xG, But 1st In Goals&quot;, subtitle=&quot;FC Cincinnati had one of the worst offensive records in the history of MLS netting only 12 actual goals(green)
+in 23 matches, despite having 22.3 expected goals(red).&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
     axis.title = element_text(size = 10), 
@@ -116,7 +117,7 @@ Leading the way in expected goals is Seattle with 41.8, and they scored exactly 
     color = &quot;grey&quot;,
     colour_x = &quot;green&quot;,
     colour_xend = &quot;red&quot;) + theme_minimal() +
-  labs(x= &quot;Goals Allowed&quot;, y= &quot;&quot;, title=&quot;Philadelphia Won The Supporters Shield Behind An Impressive Back Line&quot;, subtitle=&quot;The two teams who won silverware in 2020 ranked 1st and 2nd in total goals conceded.&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
+  labs(x= &quot;Goals Allowed&quot;, y= &quot;&quot;, title=&quot;Philadelphia Won The Supporters Shield Behind An Impressive Back Line&quot;, subtitle=&quot;The two teams who won silverware in 2020 ranked 1st and 2nd in actual goals conceded(green).&quot;, caption=&quot;Source: Sports Reference | By Peyton Thomas&quot;)  +
   theme(
     plot.title = element_text(size = 12, face = &quot;bold&quot;),
     axis.title = element_text(size = 10), 
